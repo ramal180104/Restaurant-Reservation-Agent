@@ -50,18 +50,51 @@ The system is designed with deterministic conversation flow, robust state manage
 
 The GoodFoods Reservation Assistant follows a simple and scalable architecture:
 
-User
-  ↓
-Streamlit Frontend (Chat UI)
-  ↓
-FastAPI Backend (Conversation Logic)
-  ↓
-Business Logic Layer
-  ├── Search Restaurants
-  ├── Recommend Restaurants
-  └── Make Reservation
-  ↓
-In-Memory Restaurant Data
+┌──────────────┐
+│    User      │
+│ (Web / Chat) │
+└──────┬───────┘
+       │
+       ▼
+┌────────────────────┐
+│ Streamlit Frontend │
+│  - Chat Interface  │
+│  - Session State   │
+└──────┬─────────────┘
+       │ HTTP (POST /chat)
+       ▼
+┌──────────────────────────┐
+│   FastAPI Backend        │
+│  (Conversation Engine)  │
+│                          │
+│  - Intent Detection      │
+│  - State Management      │
+│  - Validation Rules      │
+└──────┬─────────┬────────┘
+       │         │
+       ▼         ▼
+┌────────────┐  ┌──────────────────┐
+│ Search     │  │ Recommendation   │
+│ Module     │  │ Module            │
+│ - City     │  │ - Ambience        │
+│ - Cuisine  │  │ - Budget          │
+└──────┬─────┘  └──────┬───────────┘
+       │               │
+       └──────┬────────┘
+              ▼
+      ┌──────────────────┐
+      │ Reservation      │
+      │ Module           │
+      │ - Date           │
+      │ - Time           │
+      │ - Party Size     │
+      │ - User Name      │
+      └──────┬──────────┘
+             ▼
+     ┌──────────────────────┐
+     │ In-Memory Restaurant │
+     │ Dataset (Mock Data)  │
+     └──────────────────────┘
 
 
 ### Components
@@ -137,4 +170,5 @@ CTRL + C
 
 ## 7. Reset the conversation inside the app
 Type: reset
+
 
