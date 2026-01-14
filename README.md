@@ -46,6 +46,35 @@ The system is designed with deterministic conversation flow, robust state manage
 
 ---
 
+## Architecture Overview
+
+The GoodFoods Reservation Assistant follows a simple and scalable architecture:
+
+User
+  ↓
+Streamlit Frontend (Chat UI)
+  ↓
+FastAPI Backend (Conversation Logic)
+  ↓
+Business Logic Layer
+  ├── Search Restaurants
+  ├── Recommend Restaurants
+  └── Make Reservation
+  ↓
+In-Memory Restaurant Data
+
+
+### Components
+- **Streamlit Frontend**: Handles user interaction and chat flow.
+- **FastAPI Backend**: Manages conversation state and business rules.
+- **Search Module**: Filters restaurants by city and cuisine.
+- **Recommendation Module**: Suggests restaurants using ambience and budget.
+- **Reservation Module**: Confirms bookings after validation.
+
+This separation ensures clarity, maintainability, and easy extensibility.
+
+---
+
 ## 🧠 Design Philosophy
 
 - Deterministic behavior (no hallucinations)
@@ -108,3 +137,4 @@ CTRL + C
 
 ## 7. Reset the conversation inside the app
 Type: reset
+
