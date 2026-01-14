@@ -48,63 +48,68 @@ The system is designed with deterministic conversation flow, robust state manage
 
 ## Architecture Overview
 
-The GoodFoods Reservation Assistant follows a simple and scalable architecture:
+The GoodFoods Restaurant Reservation Agent follows a clean, layered architecture
+with clear separation between UI, conversation control, business logic, and data.
 
-┌──────────────┐
-│    User      │
-│ (Web / Chat) │
-└──────┬───────┘
-       │
-       ▼
-┌────────────────────┐
-│ Streamlit Frontend │
-│  - Chat Interface  │
-│  - Session State   │
-└──────┬─────────────┘
-       │ HTTP (POST /chat)
-       ▼
-┌──────────────────────────┐
-│   FastAPI Backend        │
-│  (Conversation Engine)  │
-│                          │
-│  - Intent Detection      │
-│  - State Management      │
-│  - Validation Rules      │
-└──────┬─────────┬────────┘
-       │         │
-       ▼         ▼
-┌────────────┐  ┌──────────────────┐
-│ Search     │  │ Recommendation   │
-│ Module     │  │ Module            │
-│ - City     │  │ - Ambience        │
-│ - Cuisine  │  │ - Budget          │
-└──────┬─────┘  └──────┬───────────┘
-       │               │
-       └──────┬────────┘
-              ▼
-      ┌──────────────────┐
-      │ Reservation      │
-      │ Module           │
-      │ - Date           │
-      │ - Time           │
-      │ - Party Size     │
-      │ - User Name      │
-      └──────┬──────────┘
-             ▼
-     ┌──────────────────────┐
-     │ In-Memory Restaurant │
-     │ Dataset (Mock Data)  │
-     └──────────────────────┘
+### High-Level Flow
 
+User  
+⬇️  
+Streamlit Frontend (Chat UI)  
+⬇️  
+FastAPI Backend (Conversation Controller)  
+⬇️  
+Business Logic Modules  
+⬇️  
+In-Memory Restaurant Dataset
 
-### Components
-- **Streamlit Frontend**: Handles user interaction and chat flow.
-- **FastAPI Backend**: Manages conversation state and business rules.
-- **Search Module**: Filters restaurants by city and cuisine.
-- **Recommendation Module**: Suggests restaurants using ambience and budget.
-- **Reservation Module**: Confirms bookings after validation.
+### Component Breakdown
 
-This separation ensures clarity, maintainability, and easy extensibility.
+#### 1. Streamlit Frontend
+- Handles user interaction and chat UI
+- Displays questions and responses
+- Sends user input to backend via HTTP
+
+**Location:** `frontend/app.py`
+
+---
+
+#### 2. FastAPI Backend (Conversation Engine)
+- Controls conversation flow and state
+- Enforces one-question-at-a-time logic
+- Validates inputs (city, ambience, budget, etc.)
+- Routes requests to business logic modules
+
+**Location:** `backend/main.py`
+
+---
+
+#### 3. Business Logic Modules
+Stateless utility modules that perform core operations:
+
+- **Search Module:** Filter restaurants by city and cuisine  
+  `backend/tools/search.py`
+
+- **Recommendation Module:** Suggest restaurants using ambience and budget  
+  `backend/tools/recommend.py`
+
+- **Reservation Module:** Confirm reservations after validation  
+  `backend/tools/reserve.py`
+
+---
+
+#### 4. Data Layer
+- In-memory mock dataset of GoodFoods restaurants
+- Acts as the single source of truth for locations and attributes
+
+**Location:** `backend/tools/data.py`
+
+---
+
+This architecture ensures:
+- Deterministic behavior (no hallucinations)
+- Clear separation of responsibilities
+- Easy debugging and extensibility
 
 ---
 
@@ -170,5 +175,6 @@ CTRL + C
 
 ## 7. Reset the conversation inside the app
 Type: reset
+
 
 
